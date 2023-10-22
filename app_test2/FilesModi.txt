@@ -1,0 +1,50 @@
+Modificaciones para permitir el tafico HTTP, para poder conectar servidor desde app_movil
+
+Ambiente de Movil ( Api: 30,  Andoid: 11.0)
+
+- En AndroidManifest.xml:
+
+  <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application android:networkSecurityConfig="@xml/network_security_config"
+
+- En network_security_config.xml  (Si no existe creelo en "android/app/src/main/res/xml"):
+
+  <?xml version="1.0" encoding="utf-8"?>
+  <network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+      <trust-anchors>
+      <certificates src="system" />
+    <certificates src="user" />
+  </trust-anchors>
+  </base-config>
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="true">localhost</domain>
+      <domain includeSubdomains="true">192.168.1.9</domain>
+      <domain includeSubdomains="true">http://192.168.1.9:5000/hola</domain>
+    </domain-config>
+    </network-security-config>
+
+- En tsconfig.json :
+
+  "compilerOptions": {
+      "strictPropertyInitialization": false,
+      "skipLibCheck": true,
+      ................
+
+      "angularCompilerOptions": {
+      "strictTemplates": false,
+      .................
+
+- Desintale:
+  npm uninstall cordova-plugin-ionic-webview
+
+-Index.html (Comente y descomente, dejar comentado):
+  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+
+- En capacitor.config.ts:
+  android: {
+      allowMixedContent: true
+    }
+
